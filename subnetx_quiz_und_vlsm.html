@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SubnetX – Quiz & VLSM Planer</title>
+  <style>
+    :root{--card:#111827;--card2:#1f2937;--text:#e5e7eb;--muted:#94a3b8;--accent:#6366f1;--danger:#ef4444;--border:#334155;--ok:#22c55e}*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(180deg,#0b1220,#0f172a);color:var(--text)}.wrap{max-width:1150px;margin:0 auto;padding:24px}h1{margin:0 0 8px;font-size:28px}.sub{color:var(--muted);margin-bottom:20px;line-height:1.5}.tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}button{border:0;border-radius:12px;padding:12px 16px;background:var(--accent);color:#fff;cursor:pointer;font-weight:700}button.secondary,.tab-btn{background:transparent;border:1px solid var(--border);color:var(--text)}.tab-btn.active{background:var(--accent);border-color:var(--accent)}button.danger{background:var(--danger)}button.small{padding:10px 12px}.tab{display:none}.tab.active{display:block}.grid{display:grid;grid-template-columns:1fr;gap:16px}@media(min-width:920px){.grid.two{grid-template-columns:1.05fr .95fr}}.card{background:rgba(17,24,39,.95);border:1px solid var(--border);border-radius:18px;padding:18px;box-shadow:0 10px 30px rgba(0,0,0,.25)}.section-title{font-size:18px;font-weight:700;margin:0 0 14px}.row{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:12px}@media(min-width:700px){.row.two{grid-template-columns:1fr 1fr}.row.three{grid-template-columns:1.4fr 1fr auto}.row.quiz{grid-template-columns:1fr 1fr 1fr}}label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:var(--card2);color:var(--text);outline:none}input:disabled{opacity:.55}.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}.hint{color:var(--muted);font-size:13px;line-height:1.45}.subnet-row{border:1px solid var(--border);border-radius:14px;padding:12px;margin-bottom:10px;background:rgba(31,41,55,.6)}.output,.task-box{white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;line-height:1.5;font-size:13px;background:#0b1220;border:1px solid var(--border);border-radius:14px;padding:14px;min-height:220px}.task-box{min-height:auto;margin-bottom:14px}.error{color:#fca5a5;margin-top:10px;font-weight:600;white-space:pre-wrap}.success{color:#86efac;margin-top:10px;font-weight:600;white-space:pre-wrap}.pill{display:inline-block;padding:4px 10px;border-radius:999px;background:rgba(99,102,241,.15);color:#c7d2fe;font-size:12px;margin-bottom:10px}.score{color:#c7d2fe;font-weight:800;margin-bottom:12px}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <h1>SubnetX – Quiz & VLSM Planer</h1>
+  <div class="sub">Offline HTML-Version mit <b>IPv4 Quiz</b>, <b>IPv6 Quiz</b> und <b>VLSM Netzwerkplaner</b>.</div>
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="ipv4Quiz">IPv4 Quiz</button>
+    <button class="tab-btn" data-tab="ipv6Quiz">IPv6 Quiz</button>
+    <button class="tab-btn" data-tab="vlsm">VLSM Planer</button>
+  </div>
+
+  <section id="ipv4Quiz" class="tab active">
+    <div class="grid two">
+      <div class="card">
+        <div class="section-title">IPv4 Subnetting Quiz</div>
+        <div id="ipv4Score" class="score">Punkte: 0 / 0</div>
+        <div id="ipv4Task" class="task-box">Noch keine Aufgabe.</div>
+        <div class="row quiz">
+          <div><label>Netz-ID</label><input id="ipv4NetworkInput" placeholder="z.B. 192.168.1.0"></div>
+          <div><label>Broadcast</label><input id="ipv4BroadcastInput" placeholder="z.B. 192.168.1.255"></div>
+          <div><label>Nutzbare Hosts</label><input id="ipv4HostsInput" type="number" placeholder="z.B. 254"></div>
+        </div>
+        <div class="btns"><button id="ipv4NewBtn">Neue IPv4 Aufgabe</button><button class="secondary" id="ipv4CheckBtn">Antwort prüfen</button></div>
+        <div id="ipv4Msg"></div>
+      </div>
+      <div class="card"><div class="pill">Hinweis</div><div class="output">Beim IPv4-Quiz berechnest du:
+
+• Netz-ID
+• Broadcast-Adresse
+• Anzahl nutzbarer Hosts
+
+Formel:
+Nutzbare Hosts = 2^(32-CIDR) - 2</div></div>
+    </div>
+  </section>
+
+  <section id="ipv6Quiz" class="tab">
+    <div class="grid two">
+      <div class="card">
+        <div class="section-title">IPv6 Subnetting Quiz</div>
+        <div id="ipv6Score" class="score">Punkte: 0 / 0</div>
+        <div id="ipv6Task" class="task-box">Noch keine Aufgabe.</div>
+        <div class="row quiz">
+          <div><label>Netzwerk-Adresse</label><input id="ipv6NetworkInput" placeholder="z.B. 2001:db8::"></div>
+          <div><label>Letzte Adresse</label><input id="ipv6LastInput" placeholder="z.B. 2001:db8::ffff"></div>
+          <div><label>Adressen/Hosts</label><input id="ipv6HostsInput" placeholder="z.B. 2^64"></div>
+        </div>
+        <div class="btns"><button id="ipv6NewBtn">Neue IPv6 Aufgabe</button><button class="secondary" id="ipv6CheckBtn">Antwort prüfen</button></div>
+        <div id="ipv6Msg"></div>
+      </div>
+      <div class="card"><div class="pill">Hinweis</div><div class="output">Beim IPv6-Quiz gibt es keine klassische Broadcast-Adresse.
+
+Du berechnest:
+
+• Netzwerk-Adresse
+• Letzte Adresse im Präfix
+• Anzahl Adressen = 2^(128-CIDR)
+
+Bei Hosts akzeptiert die App z.B. 2^64 oder die ausgeschriebene Zahl.</div></div>
+    </div>
+  </section>
+
+  <section id="vlsm" class="tab">
+    <div class="grid two">
+      <div class="card">
+        <div class="section-title">Basisnetz</div>
+        <div class="row"><div><label for="baseIp">IP-Adresse</label><input id="baseIp" placeholder="z.B. 192.168.10.0"></div></div>
+        <div class="row two">
+          <div><label for="baseCidr">CIDR</label><input id="baseCidr" placeholder="z.B. 24 oder /24"></div>
+          <div><label for="baseMask">Subnetzmaske</label><input id="baseMask" placeholder="z.B. 255.255.255.0"></div>
+        </div>
+        <div class="hint">IP ist Pflicht. Danach entweder CIDR oder Subnetzmaske eintragen.</div>
+        <div style="height:18px"></div>
+        <div class="section-title">Teilnetze</div>
+        <div id="subnetRows"></div>
+        <div class="btns"><button type="button" id="addRowBtn">+ Netz hinzufügen</button><button type="button" class="secondary" id="calcBtn">Berechnen</button><button type="button" class="secondary" id="resetBtn">Alles löschen</button></div>
+        <div id="message"></div>
+      </div>
+      <div class="card"><div class="pill">Ergebnis</div><div id="output" class="output">Noch keine Berechnung.</div></div>
+    </div>
+  </section>
+</div>
+
+<template id="rowTpl"><div class="subnet-row"><div class="row three"><div><label>Name</label><input class="name" placeholder="z.B. Büro, Gäste, Server"></div><div><label>Benötigte Hosts</label><input class="hosts" type="number" min="0" placeholder="z.B. 62"></div><div style="display:flex;align-items:end;"><button type="button" class="danger small removeBtn">Löschen</button></div></div></div></template>
+
+<script>
+document.querySelectorAll('.tab-btn').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');document.getElementById(btn.dataset.tab).classList.add('active')}));
+function setMsg(el,text='',ok=false){el.className=ok?'success':'error';el.textContent=text}
+function randomInt(max){return Math.floor(Math.random()*max)}
+function ipToInt(ip){const p=ip.trim().split('.').map(Number);if(p.length!==4||p.some(n=>Number.isNaN(n)||n<0||n>255))throw new Error('Ungültige IPv4-Adresse: '+ip);return (((p[0]<<24)>>>0)|(p[1]<<16)|(p[2]<<8)|p[3])>>>0}
+function intToIp(num){return[(num>>>24)&255,(num>>>16)&255,(num>>>8)&255,num&255].join('.')}
+function prefixToMaskInt(prefix){if(prefix<0||prefix>32)throw new Error('Ungültiger Prefix /'+prefix);if(prefix===0)return 0;return ((0xFFFFFFFF<<(32-prefix))>>>0)}
+function prefixToMaskStr(prefix){return intToIp(prefixToMaskInt(prefix))}
+function maskStrToPrefix(mask){const parts=mask.trim().split('.').map(Number);if(parts.length!==4||parts.some(n=>Number.isNaN(n)||n<0||n>255))throw new Error('Ungültige Subnetzmaske: '+mask);let prefix=0,zeroSeen=false;for(const p of parts){for(let i=7;i>=0;i--){const bit=(p>>i)&1;if(bit===1){if(zeroSeen)throw new Error('Subnetzmaske ist nicht zusammenhängend: '+mask);prefix++}else zeroSeen=true}}return prefix}
+function blockSize(prefix){return 2**(32-prefix)}
+function usableFromTotal(total){return total>=4?total-2:0}
+
+let ipv4Current=null,ipv4Points=0,ipv4Max=0;
+function newIPv4Task(){const ip=`${randomInt(256)}.${randomInt(256)}.${randomInt(256)}.${randomInt(256)}`;const cidr=8+randomInt(23);const ipInt=ipToInt(ip);const mask=prefixToMaskInt(cidr);const network=(ipInt&mask)>>>0;const broadcast=(network|(~mask>>>0))>>>0;const total=blockSize(cidr);ipv4Current={ip,cidr,mask:prefixToMaskStr(cidr),network:intToIp(network),broadcast:intToIp(broadcast),hosts:String(usableFromTotal(total))};ipv4NetworkInput.value='';ipv4BroadcastInput.value='';ipv4HostsInput.value='';setMsg(ipv4Msg,'');ipv4Task.textContent=`IP-Adresse: ${ip}\nCIDR: /${cidr}\nSubnetzmaske: ${ipv4Current.mask}`}
+function checkIPv4(){if(!ipv4Current)newIPv4Task();let pts=0;if(ipv4NetworkInput.value.trim()===ipv4Current.network)pts++;if(ipv4BroadcastInput.value.trim()===ipv4Current.broadcast)pts++;if(ipv4HostsInput.value.trim()===ipv4Current.hosts)pts++;ipv4Points+=pts;ipv4Max+=3;ipv4Score.textContent=`Punkte: ${ipv4Points} / ${ipv4Max}`;setMsg(ipv4Msg,pts===3?`Alles richtig! +${pts} Punkte`:`Du hast ${pts}/3 Punkten.\nRichtig: Netz-ID ${ipv4Current.network}, Broadcast ${ipv4Current.broadcast}, Hosts ${ipv4Current.hosts}`,pts===3)}
+ipv4NewBtn.addEventListener('click',newIPv4Task);ipv4CheckBtn.addEventListener('click',checkIPv4);
+
+function random16(){return Math.floor(Math.random()*0x10000)}
+function ipv6ToBigInt(ip){ip=ip.trim().toLowerCase();if(!ip)throw new Error('Ungültige IPv6-Adresse');if(ip.includes('.'))throw new Error('IPv4-mapped IPv6 wird nicht unterstützt.');const parts=ip.split('::');if(parts.length>2)throw new Error('Ungültige IPv6-Adresse: '+ip);const left=parts[0]?parts[0].split(':').filter(Boolean):[];const right=parts.length===2&&parts[1]?parts[1].split(':').filter(Boolean):[];const missing=8-(left.length+right.length);if(missing<0)throw new Error('Ungültige IPv6-Adresse: '+ip);const groups=[...left,...Array(missing).fill('0'),...right];if(groups.length!==8)throw new Error('Ungültige IPv6-Adresse: '+ip);let value=0n;for(const g of groups){if(!/^[0-9a-f]{1,4}$/.test(g))throw new Error('Ungültige IPv6-Gruppe: '+g);value=(value<<16n)+BigInt(parseInt(g,16))}return value}
+function bigIntToIpv6(value){const groups=[];for(let i=7;i>=0;i--){groups.push(Number((value>>BigInt(i*16))&0xffffn).toString(16))}let bestStart=-1,bestLen=0;for(let i=0;i<8;i++){if(groups[i]!=='0')continue;let j=i;while(j<8&&groups[j]==='0')j++;const len=j-i;if(len>bestLen&&len>=2){bestStart=i;bestLen=len}i=j}if(bestStart>=0){const before=groups.slice(0,bestStart).join(':'),after=groups.slice(bestStart+bestLen).join(':');if(before&&after)return before+'::'+after;if(before)return before+'::';if(after)return '::'+after;return '::'}return groups.join(':')}
+function randomIPv6BigInt(){let v=0n;for(let i=0;i<8;i++)v=(v<<16n)+BigInt(random16());return v}
+function ipv6Mask(prefix){if(prefix===0)return 0n;return ((1n<<BigInt(prefix))-1n)<<BigInt(128-prefix)}
+let ipv6Current=null,ipv6Points=0,ipv6Max=0;
+function newIPv6Task(){const prefix=32+randomInt(65);const ipBig=randomIPv6BigInt();const mask=ipv6Mask(prefix);const network=ipBig&mask;const size=1n<<BigInt(128-prefix);const last=network+size-1n;const ip=bigIntToIpv6(ipBig);ipv6Current={ip,cidr:prefix,network:bigIntToIpv6(network),last:bigIntToIpv6(last),hosts:size.toString(),hostsPower:`2^${128-prefix}`};ipv6NetworkInput.value='';ipv6LastInput.value='';ipv6HostsInput.value='';setMsg(ipv6Msg,'');ipv6Task.textContent=`IPv6-Adresse: ${ip}\nCIDR: /${prefix}`}
+function normalizeIpv6(s){try{return bigIntToIpv6(ipv6ToBigInt(s))}catch{return s.trim().toLowerCase()}}
+function checkIPv6(){if(!ipv6Current)newIPv6Task();let pts=0;if(normalizeIpv6(ipv6NetworkInput.value)===ipv6Current.network)pts++;if(normalizeIpv6(ipv6LastInput.value)===ipv6Current.last)pts++;const h=ipv6HostsInput.value.trim().replace(/\s+/g,'').toLowerCase();if(h===ipv6Current.hosts||h===ipv6Current.hostsPower.toLowerCase())pts++;ipv6Points+=pts;ipv6Max+=3;ipv6Score.textContent=`Punkte: ${ipv6Points} / ${ipv6Max}`;setMsg(ipv6Msg,pts===3?`Alles richtig! +${pts} Punkte`:`Du hast ${pts}/3 Punkten.\nRichtig: Netzwerk ${ipv6Current.network}, letzte Adresse ${ipv6Current.last}, Adressen ${ipv6Current.hostsPower}`,pts===3)}
+ipv6NewBtn.addEventListener('click',newIPv6Task);ipv6CheckBtn.addEventListener('click',checkIPv6);
+
+const tpl=document.getElementById('rowTpl');
+function setPlannerMessage(text='',ok=false){message.className=ok?'success':'error';message.textContent=text}
+function addRow(name='',hosts=''){const node=tpl.content.firstElementChild.cloneNode(true);node.querySelector('.name').value=name;node.querySelector('.hosts').value=hosts;node.querySelector('.removeBtn').addEventListener('click',()=>node.remove());subnetRows.appendChild(node)}
+function resetAll(){baseIp.value='';baseCidr.value='';baseMask.value='';subnetRows.innerHTML='';addRow();addRow();output.textContent='Noch keine Berechnung.';setPlannerMessage('');syncMode()}
+function prefixForHosts(hostsNeeded){if(hostsNeeded<0)throw new Error('Hosts dürfen nicht negativ sein.');let totalNeeded=hostsNeeded+2;if(totalNeeded<=2)totalNeeded=4;const bits=Math.ceil(Math.log2(totalNeeded));let prefix=32-bits;if(prefix>30)prefix=30;if(prefix<0)prefix=0;return prefix}
+function parseBase(ip,cidr,mask){if(!ip)throw new Error('Bitte IP-Adresse für das Basisnetz eingeben.');if(!cidr&&!mask)throw new Error('Bitte CIDR ODER Subnetzmaske eingeben.');if(cidr&&mask)throw new Error('Bitte entweder CIDR ODER Subnetzmaske nutzen, nicht beides.');const ipInt=ipToInt(ip);const prefix=cidr?Number(String(cidr).replace('/','').trim()):maskStrToPrefix(mask);if(!Number.isInteger(prefix)||prefix<0||prefix>32)throw new Error('Ungültiger CIDR-Prefix.');const maskInt=prefixToMaskInt(prefix);return{network:(ipInt&maskInt)>>>0,prefix}}
+function summarizeRange(start,end){const out=[];let current=start>>>0,last=end>>>0;while(current<=last){let maxSize=current&-current;if(maxSize===0)maxSize=1;let remaining=last-current+1;while(maxSize>remaining)maxSize>>>=1;const prefix=32-Math.round(Math.log2(maxSize));out.push(`${intToIp(current)}/${prefix}`);current=(current+maxSize)>>>0;if(current===0)break}return out}
+function allocate(base,reqs){const baseStart=base.network>>>0,baseMask=prefixToMaskInt(base.prefix),baseEnd=(base.network|(~baseMask>>>0))>>>0;const sorted=[...reqs].sort((a,b)=>prefixForHosts(a.hosts)-prefixForHosts(b.hosts));let current=baseStart;const allocated=[];for(const r of sorted){const prefix=prefixForHosts(r.hosts),size=blockSize(prefix);let aligned=Math.ceil(current/size)*size,net=aligned>>>0,bc=(net+size-1)>>>0;if(net<baseStart||bc>baseEnd)throw new Error('Nicht genug Adressraum im Basisnetz für alle Teilnetze.');if(allocated.length&&net<=allocated[allocated.length-1].broadcast){current=allocated[allocated.length-1].broadcast+1;aligned=Math.ceil(current/size)*size;net=aligned>>>0;bc=(net+size-1)>>>0;if(bc>baseEnd)throw new Error('Nicht genug Adressraum im Basisnetz für alle Teilnetze.')}allocated.push({name:r.name,prefix,network:net,broadcast:bc,total:size});current=bc+1}const remaining=[];if(allocated.length){if(allocated[0].network>baseStart)remaining.push({start:baseStart,end:allocated[0].network-1});for(let i=0;i<allocated.length-1;i++){const s=allocated[i].broadcast+1,e=allocated[i+1].network-1;if(e>=s)remaining.push({start:s>>>0,end:e>>>0})}if(current<=baseEnd)remaining.push({start:current>>>0,end:baseEnd>>>0})}else remaining.push({start:baseStart,end:baseEnd});return{allocated,remaining}}
+function calculate(){try{setPlannerMessage('');const ip=baseIp.value.trim(),cidr=baseCidr.value.trim(),mask=baseMask.value.trim();const reqs=[...subnetRows.querySelectorAll('.subnet-row')].map((row,index)=>{const name=row.querySelector('.name').value.trim()||`Netz ${index+1}`;const hostsRaw=row.querySelector('.hosts').value.trim();if(!hostsRaw)return null;const hosts=Number(hostsRaw);if(!Number.isInteger(hosts)||hosts<0)throw new Error('Hosts müssen eine ganze Zahl >= 0 sein.');return{name,hosts}}).filter(Boolean);if(!reqs.length)throw new Error('Bitte mindestens ein Teilnetz mit Host-Anzahl angeben.');const base=parseBase(ip,cidr,mask),res=allocate(base,reqs);let usedTotal=0,usedUsable=0;const baseTotal=blockSize(base.prefix),baseUsable=usableFromTotal(baseTotal);const lines=[];lines.push('BASISNETZ');lines.push(`IP/Prefix: ${intToIp(base.network)}/${base.prefix}`);lines.push(`Maske: ${prefixToMaskStr(base.prefix)}`);lines.push(`Gesamt IP-Adressen: ${baseTotal}`);lines.push(`Nutzbare Hosts (gesamt-2): ${baseUsable}`);lines.push('');for(const s of res.allocated){const totalIps=s.total,usableHosts=usableFromTotal(totalIps),usableRange=totalIps>=4?`${intToIp(s.network+1)} – ${intToIp(s.broadcast-1)}`:'—';usedTotal+=totalIps;usedUsable+=usableHosts;lines.push(s.name);lines.push(`Netz-ID: ${intToIp(s.network)}`);lines.push(`Maske: ${prefixToMaskStr(s.prefix)} (/${s.prefix})`);lines.push(`Gesamt IP-Adressen: ${totalIps}`);lines.push(`Nutzbarer Bereich: ${usableRange}`);lines.push(`Letzte Adresse (Broadcast): ${intToIp(s.broadcast)}`);lines.push(`Nutzbare Hosts (gesamt-2): ${usableHosts}`);lines.push('')}const remainingTotal=res.remaining.reduce((sum,r)=>sum+(r.end-r.start+1),0),remainingUsable=res.remaining.reduce((sum,r)=>sum+usableFromTotal(r.end-r.start+1),0);if(res.remaining.length){lines.push('FREIE BEREICHE');for(const r of res.remaining){const total=r.end-r.start+1,usable=usableFromTotal(total);lines.push(`${intToIp(r.start)} – ${intToIp(r.end)} | Gesamt: ${total} | Nutzbar: ${usable}`);for(const block of summarizeRange(r.start,r.end).slice(0,8))lines.push(`  • ${block}`)}lines.push('')}lines.push(`Übrig: ${remainingTotal} IP-Adressen | Nutzbar: ${remainingUsable} Hosts`);lines.push(`Verbraucht: ${usedTotal} IP-Adressen | Nutzbar: ${usedUsable} Hosts`);output.textContent=lines.join('\n');setPlannerMessage('Berechnung erfolgreich.',true)}catch(err){output.textContent='Noch keine Berechnung.';setPlannerMessage(err.message||String(err),false)}}
+function syncMode(){const cidrFilled=baseCidr.value.trim()!=='';const maskFilled=baseMask.value.trim()!=='';baseMask.disabled=cidrFilled;baseCidr.disabled=maskFilled}
+addRowBtn.addEventListener('click',()=>addRow());calcBtn.addEventListener('click',calculate);resetBtn.addEventListener('click',resetAll);baseCidr.addEventListener('input',syncMode);baseMask.addEventListener('input',syncMode);
+resetAll();newIPv4Task();newIPv6Task();
+</script>
+</body>
+</html>
